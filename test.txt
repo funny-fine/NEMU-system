@@ -1,0 +1,2 @@
+cd /mnt/hgfs   
+cp code.txt /home/fyz/Desktop 
