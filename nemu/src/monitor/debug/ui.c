@@ -37,6 +37,7 @@ static int cmd_q(char *args) {
 }
 
 static int cmd_help(char *args);
+static int cmd_si(char *args);
 
 static struct {
   char *name;
@@ -48,6 +49,8 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
+
+  { "si", "Step [N] instructions exactly (1 step if no args given), usage: si [N]", cmd_si }
 
 };
 
@@ -72,6 +75,27 @@ static int cmd_help(char *args) {
       }
     }
     printf("Unknown command '%s'\n", arg);
+  }
+  return 0;
+}
+
+//my code
+static int cmd_si(char *args) {
+
+  uint64_t n = 0;
+
+  if (args == NULL) {/* no argument given */
+    cpu_exec(1); // 1 is the default
+  }
+  else {
+    char *temp = strtok(NULL, " ");
+    if (temp == NULL) {
+      sscanf(args, "%llu", &n);
+      cpu_exec(n); // Execute n times
+    }
+    else {
+      printf("Syntax error: Too much arguments.\n");
+    }
   }
   return 0;
 }
