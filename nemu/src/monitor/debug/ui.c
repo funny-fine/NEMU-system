@@ -81,16 +81,18 @@ static int cmd_help(char *args) {
 
 //my code
 static int cmd_si(char *args) {
-
+  /* extract the first argument */
+  char *arg = strtok(NULL, " ");
   uint64_t n = 0;
 
-  if (args == NULL) {/* no argument given */
+  if (arg == NULL) {
+    /* no argument given */
     cpu_exec(1); // 1 is the default
   }
   else {
     char *temp = strtok(NULL, " ");
     if (temp == NULL) {
-      sscanf(args, "%llu", &n);
+      sscanf(arg, "%llu", &n);
       cpu_exec(n); // Execute n times
     }
     else {
