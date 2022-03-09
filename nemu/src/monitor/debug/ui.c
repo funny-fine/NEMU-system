@@ -38,6 +38,7 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 static int cmd_si(char *args);
+static int cmd_info(char *args);
 
 static struct {
   char *name;
@@ -50,7 +51,8 @@ static struct {
 
   /* TODO: Add more commands */
 
-  { "si", "Step [N] instructions exactly (1 step if no args given), usage: si [N]", cmd_si }
+  { "si", "Step [N] instructions exactly (1 step if no args given), usage: si [N]", cmd_si },
+  { "info", "Display informations about registers and watchpoints in the program being debugged, usage: info r / info w", cmd_info }
 
 };
 
@@ -98,6 +100,87 @@ static int cmd_si(char *args) {
     else {
       printf("Syntax error: Too much arguments.\n");
     }
+  }
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  /* extract the first argument */
+  char *arg = strtok(NULL, " ");
+
+  if (args == NULL) {
+    /* no argument given, show rules */
+    printf("\"info\" must be followed by the name of an info command.\n");
+    printf("List of info subcommands:\n\n");
+    printf("info r -- List of integer registers and their contents\n");
+    printf("info w -- Status of specified watchpoints (all watchpoints if no argument)\n");
+  }
+  else if (strcmp(arg, "r") == 0) {
+  	char *temp = strtok(NULL, " ");
+    if (temp == NULL) {
+    	/* print all registers */
+    	uint32_t i;
+  	for (i = 0; i < 8 ; i++) 
+  	{printf("%s\t0x%x\t%d\n", reg_name(i, 4), reg_l(i), reg_l(i));}
+    	printf("eip\t0x%x\t%d\n", cpu.eip, cpu.eip);
+    	for (i = 0; i < 8 ; i++) 
+  	{printf("%s\t0x%x\t%hd\n", reg_name(i, 2), reg_w(i), reg_w(i));}
+  	for (i = 0; i < 8 ; i++) 
+  	{printf("%s\t0x%x\t%hhd\n", reg_name(i, 1), reg_b(i), reg_b(i));}
+    }
+    else {
+    	uint32_t i;
+    	uint32_t find = 0;
+    	while (temp != NULL) 
+	{
+    	  find = 0;
+    	  for (i = 0; i < 8; i++) {
+    	  if (strcmp(reg_name(i, 4), temp) == 0) {
+    				printf("%s\t0x%x\t%d\n", reg_name(i, 4), reg_l(i), reg_l(i));
+    				find = 1;
+    				break;
+    			}
+    		}
+    		if (find) {
+    			temp = strtok(NULL, " ");
+    			continue;
+    		}
+    		if (strcmp("eip", temp) == 0) {
+    			printf("eip\t0x%x\t%d\n", cpu.eip, cpu.eip);
+    			find = 1;
+    			temp = strtok(NULL, " ");
+    			continue;
+    		}
+    		for (i = 0; i < 8; i++) {
+    			if (strcmp(reg_name(i, 2), temp) == 0) {
+    				printf("%s\t0x%x\t%hd\n", reg_name(i, 2), reg_w(i), reg_w(i));
+    				find = 1;
+    				break;
+    			}
+    		}
+    		if (find) {
+    			temp = strtok(NULL, " ");
+    			continue;
+    		}
+    		for (i = 0; i < 8; i++) {
+    			if (strcmp(reg_name(i, 1), temp) == 0) {
+    				printf("%s\t0x%x\t%hhd\n", reg_name(i, 1), reg_b(i), reg_b(i));
+    				find = 1;
+    				break;
+    			}
+    		}
+    		if (!find) {
+    			printf("Invalid register `%s'\n", temp);
+    		}
+    		temp = strtok(NULL, " ");
+    	}
+    }
+  }
+  else if (strcmp(arg, "w") == 0) {
+    print_wp();
+  }
+  else {
+  	printf("Undefined info command: \"%s\"\n", arg);
   }
   return 0;
 }
