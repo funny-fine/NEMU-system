@@ -39,6 +39,10 @@ static int cmd_q(char *args) {
 static int cmd_help(char *args);
 static int cmd_si(char *args);
 static int cmd_info(char *args);
+static int cmd_x(char *args);
+static int cmd_p(char *args);
+static int cmd_w(char *args);
+static int cmd_d(char *args);
 
 static struct {
   char *name;
@@ -52,7 +56,8 @@ static struct {
   /* TODO: Add more commands */
 
   { "si", "Step [N] instructions exactly (1 step if no args given), usage: si [N]", cmd_si },
-  { "info", "Display informations about registers and watchpoints in the program being debugged, usage: info r / info w", cmd_info }
+  { "info", "Display informations about registers and watchpoints in the program being debugged, usage: info r / info w", cmd_info },
+  { "x", "Examine memory, usage: x [N] [EXPR]", cmd_x }
 
 };
 
@@ -120,6 +125,25 @@ static int cmd_info(char *args)
      for(i=0;i<8;i++) printf("%s    0x%x\n",regsb[i],reg_b(i));
      return 0;
   }
+}
+
+static int cmd_x(char *args) 
+{
+  int nLen=0;
+  vaddr_t addr;
+  int nRet=sscanf(args,"%d 0x%x",&nLen,&addr);
+  if(nRet<=0) {printf("args error in cmd_x\n");  return 0;}
+  printf("Memory:");
+  for(int i=0;i<nLen;i++) 
+  {
+    if(i%4==0)
+      printf("\n0x%x:    0x%02x",addr+i,vaddr_read(addr+i,1));
+    else
+      printf("    0x%02x",vaddr_read(addr+i,1));
+  }
+  printf("\n");
+  return 0;
+  
 }
 
 void ui_mainloop(int is_batch_mode) {
