@@ -29,10 +29,10 @@ static struct rule {
 
   {"0|[1-9][0-9]*",TK_NUMBER},
 
-  {"\\+", TK_PLUS},                  // plus
-  {"\\-", TK_MINUS},                 // minus
-  {"\\*", TK_TIMES},                 // times
-  {"\\/", TK_DIV},                   // division               // not
+  {"\+", TK_PLUS},                  // plus
+  {"\-", TK_MINUS},                 // minus
+  {"\*", TK_TIMES},                 // times
+  {"\/", TK_DIV},                   // division               // not
   
   {"\\(", '('},                // left parenthesis
   {"\\)", ')'}                // right parenthesis
