@@ -7,11 +7,10 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, 
 
   /* TODO: Add more token types */
-  TK_NUMBER,TK_PLUS, TK_MINUS, 
-  TK_TIMES, TK_DIV
+  TK_NUMBER
 
 };
 
@@ -25,14 +24,13 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"==", TK_EQ},        // equal
 
   {"0|[1-9][0-9]*",TK_NUMBER},
 
-  {"\\+", TK_PLUS},                  // plus
-  {"\\-", TK_MINUS},                 // minus
-  {"\\*", TK_TIMES},                 // times
-  {"\\/", TK_DIV},                   // division               // not
+  {"\\+", '+'},                  // plus
+  {"-", '-'},                 // minus
+  {"\\*", '*'},                 // times
+  {"\\/", '/'},                   // division               // not
   
   {"\\(", '('},                // left parenthesis
   {"\\)", ')'}                // right parenthesis
