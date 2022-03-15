@@ -57,7 +57,8 @@ static struct {
 
   { "si", "Step [N] instructions exactly (1 step if no args given), usage: si [N]", cmd_si },
   { "info", "Display informations about registers and watchpoints in the program being debugged, usage: info r / info w", cmd_info },
-  { "x", "Examine memory, usage: x [N] [EXPR]", cmd_x }
+  { "x", "Examine memory, usage: x [N] [EXPR]", cmd_x },
+  { "p", "Print value of expression, usage: p [EXPR]", cmd_p }
 
 };
 
@@ -144,6 +145,23 @@ static int cmd_x(char *args)
   printf("\n");
   return 0;
   
+}
+
+static int cmd_p(char *args) {
+  if (args == NULL) {
+    printf("Argument required (expression to compute).\n");
+    return 0;
+  }
+	bool success = false;
+	uint32_t result = expr(args, &success);
+	if (success) {
+		printf("Decimal result = %d\n", (int)result);
+		printf("Hexadecimal result = 0x%x\n", result);
+	}
+	else {
+		printf("Illegal expression.\n");
+	}
+	return 0;
 }
 
 void ui_mainloop(int is_batch_mode) {
