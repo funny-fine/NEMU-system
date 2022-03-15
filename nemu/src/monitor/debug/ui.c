@@ -147,8 +147,10 @@ static int cmd_x(char *args)
   
 }
 
-static int cmd_p(char *args) {
-  if (args == NULL) {
+static int cmd_p(char *args) 
+{
+  if (args == NULL) 
+  {
     printf("Argument required (expression to compute).\n");
     return 0;
   }
