@@ -29,7 +29,7 @@ static struct rule {
 
   {"0|[1-9][0-9]*",TK_NUMBER},
 
-  {"+", TK_PLUS},                  // plus
+  {"\\+", TK_PLUS},                  // plus
   {"\\-", TK_MINUS},                 // minus
   {"\\*", TK_TIMES},                 // times
   {"\\/", TK_DIV},                   // division               // not
@@ -119,6 +119,25 @@ static bool make_token(char *e) {
   }
 
   return true;
+}
+
+static int check_parentheses(int p, int q) 
+{
+	if(p>=q){printf("error:p>=q in check\n");return 0;}
+	if(tokens[p].type!='('||tokens[q].type!=')') return 0;
+
+	int count=0;
+	for(int curr=p+1;curr<q;curr++)
+	{
+	  if(tokens[curr].type=='(') count++;
+	  if(tokens[curr].type==')') 
+	  {
+		if(count!=0) count--;
+		else return 0;
+	  }
+	}
+	if(count==0) return 1;
+	else return 0;
 }
 
 uint32_t expr(char *e, bool *success) {
