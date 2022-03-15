@@ -10,7 +10,8 @@ enum {
   TK_NOTYPE = 256, TK_EQ,
 
   /* TODO: Add more token types */
-  TK_NUMBER
+  TK_NUMBER,TK_PLUS, TK_MINUS, 
+  TK_TIMES, TK_DIV
 
 };
 
@@ -28,10 +29,10 @@ static struct rule {
 
   {"0|[1-9=[0-9]*",TK_NUMBER},
 
-  {"\\+", '+'},                  // plus
-  {"\\-", '-'},                 // minus
-  {"\\*", '*'},                 // times
-  {"\\/", '/'},                   // division               // not
+  {"\\+", TK_PLUS},                  // plus
+  {"\\-", TK_MINUS},                 // minus
+  {"\\*", TK_TIMES},                 // times
+  {"\\/", TK_DIV},                   // division               // not
   
   {"\\(", '('},                // left parenthesis
   {"\\)", ')'}                // right parenthesis
