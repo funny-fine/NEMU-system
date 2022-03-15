@@ -154,16 +154,14 @@ static int cmd_p(char *args)
     printf("Argument required (expression to compute).\n");
     return 0;
   }
-	bool success = false;
-	uint32_t result = expr(args, &success);
-	if (success) {
-		printf("Decimal result = %d\n", (int)result);
-		printf("Hexadecimal result = 0x%x\n", result);
-	}
-	else {
-		printf("Illegal expression.\n");
-	}
-	return 0;
+  bool success = false;
+  int result = expr(args, &success);
+  if (success) 
+  {
+	printf("expr_value = %d\n", result);
+  }
+  else printf("Illegal expression.\n");
+  return 0;
 }
 
 void ui_mainloop(int is_batch_mode) {
