@@ -92,21 +92,15 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
-	if(substr_len>32)
-	    assert(0);
-        if(rules[i].token_type==TK_NOTYPE) 
-	    break;
-	else
-	{
-	    tokens[nr_token].type = rules[i].token_type;
-	    switch(rules[i].token_type)
-	{case TK_NUMBER: strncpy(tokens[nr_token].str,substr_start,substr_len);
-	   *(tokens[nr_token].str+substr_len)='\0';break;
-          //default: TODO();
+	if (rules[i].token_type != TK_NOTYPE) { // ignore spaces
+          assert(substr_len >= 0 && substr_len < 32);
+          tokens[nr_token].type = rules[i].token_type;
+          memset(tokens[nr_token].str, 0, sizeof(tokens[nr_token].str));
+          strncpy(tokens[nr_token].str, substr_start, substr_len);
+          tokens[nr_token].str[substr_len] = '\0';
+          nr_token++;
         }
-	nr_token+=1;
-        break;
-	}
+	break;
       }
     }
 
