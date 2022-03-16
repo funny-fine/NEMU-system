@@ -108,9 +108,12 @@ static bool make_token(char *e) {
 	    switch(rules[i].token_type)
 	{case TK_NUMBER: strncpy(tokens[nr_token].str,substr_start,substr_len);
 	   *(tokens[nr_token].str+substr_len)='\0';break;
+	 case TK_HEX: strncpy(tokens[nr_token].str,substr_start,substr_len);
+	   *(tokens[nr_token].str+substr_len)='\0';break;
           //default: TODO();
         }
 	nr_token+=1;
+	printf("some information of the token: type=%d,token=%s\n",tokens[nr_token].type,tokens[nr_token].str);
         break;
 	}
       }
@@ -164,5 +167,5 @@ uint32_t expr(char *e, bool *success) {
 	tokens[i].type=TK_DEREF;
   }
   *success = true;
-  return eval(0,nr_token-1);
+  return 0;
 }
