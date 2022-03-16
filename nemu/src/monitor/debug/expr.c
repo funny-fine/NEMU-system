@@ -10,7 +10,9 @@ enum {
   TK_NOTYPE = 256, 
 
   /* TODO: Add more token types */
-  TK_NUMBER
+  TK_NUMBER,TK_HEX,TK_REG,
+  TK_EQ,TK_NEQ,//TK_AND,TK_OR,
+  TK_NEGATIVE,TK_DEREF
 
 };
 
@@ -24,8 +26,12 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-
+  {"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi|eip|ax|cx|dx|bx|sp|bp|si|di|al|cl|dl|bl|ah|ch|dh|bh)", TK_REG}, 
+  {"0x[0-9a-fA-F]+", TK_HEX},     // hexadecimal integer
   {"0|[1-9][0-9]*",TK_NUMBER},
+
+  {"==", TK_EQ},                     // equal
+  {"!=", TK_NEQ}, 
 
   {"\\+", '+'},                  // plus
   {"-", '-'},                 // minus
@@ -146,5 +152,17 @@ uint32_t expr(char *e, bool *success) {
 
   /* TODO: Insert codes to evaluate the expression. */
   //TODO();
-  return 0;
+  if(tokens[0].type=='-')
+	tokens[0].type=TK_NEGATIVE;
+  if(tokens[0].type=='*')
+	tokens[0].type=TK_DEREF;
+  for(int i=1;i<nr_token;i++)
+  {
+    if(tokens[i].type=='-'&&tokens[i-1].type!=TK_NUMBER && tokens[i-1].type!=')')
+	tokens[i].type=TK_NEGATIVE;
+    if(tokens[i].type=='*'&&tokens[i-1].type!=TK_NUMBER && tokens[i-1].type!=')')
+	tokens[i].type=TK_DEREF;
+  }
+  *success = true;
+  return eval(0,nr_token-1);
 }
