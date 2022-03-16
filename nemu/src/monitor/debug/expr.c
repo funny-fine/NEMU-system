@@ -124,7 +124,7 @@ static bool make_token(char *e) {
 
   return true;
 }
-
+/*
 static int check_parentheses(int p, int q) 
 {
 	if(p>=q){printf("error:p>=q in check\n");return 0;}
@@ -142,6 +142,31 @@ static int check_parentheses(int p, int q)
 	}
 	if(count==0) return 1;
 	else return 0;
+}*/
+
+static int check_parentheses(int p, int q) {
+	assert(p <= q);
+	int estack[32];
+	memset(estack, -1, sizeof(estack));
+	int i, etop = -1;
+	int lastmatchlp = -1, lastmatchrp = -1;
+	for (i = p; i <= q; i++) 
+	{
+		if (tokens[i].type == '(') estack[++etop] = i;
+		if (tokens[i].type == ')') 
+		{
+			if (etop == -1)  return -2; // bad expression, the rightmost ')' is not matched
+			lastmatchlp = estack[etop--];
+			lastmatchrp = i;
+		}
+	}
+	if (etop != -1)  return -2; // bad expression, the leftmost '(' is not matched
+	if (lastmatchlp != p || lastmatchrp != q) 
+	{
+		if (tokens[p].type == '(' && tokens[q].type == ')')  return -3; 
+		return -1; 
+	}
+	return 1;
 }
 
 uint32_t expr(char *e, bool *success) {
@@ -150,7 +175,7 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-  if (check_parentheses(0, nr_token - 1) == 0) 
+  if (check_parentheses(0, nr_token - 1) == -2) 
   {
   	*success = false;
   	return 0;
