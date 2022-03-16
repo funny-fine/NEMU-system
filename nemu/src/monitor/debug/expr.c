@@ -316,6 +316,6 @@ uint32_t expr(char *e, bool *success)
 	tokens[i].type=TK_DEREF;
   }
   *success = true;
-  return 0;
-  //return eval(0,nr_token-1);
+  //return 0;
+  return eval(0,nr_token-1,success);
 }
