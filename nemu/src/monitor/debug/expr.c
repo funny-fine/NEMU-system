@@ -108,8 +108,6 @@ static bool make_token(char *e) {
 	    switch(rules[i].token_type)
 	{case TK_NUMBER: strncpy(tokens[nr_token].str,substr_start,substr_len);
 	   *(tokens[nr_token].str+substr_len)='\0';break;
-	 case TK_HEX: strncpy(tokens[nr_token].str,substr_start,substr_len);
-	   *(tokens[nr_token].str+substr_len)='\0';break;
           //default: TODO();
         }
 	nr_token+=1;
