@@ -193,6 +193,49 @@ static int priority(int token_type)
 	}
 }
 
+static int judge_prior(int sstack, int curr) 
+{
+	if (priority(sstack) == -1 || priority(curr) == -1) return 0;
+	if (priority(sstack) > priority(curr))  return 1;
+	else if (priority(sstack) < priority(curr)) return -1;
+	else 
+	{
+		int pstack = priority(sstack);
+		if (pstack != 6)  return 1;
+		else   return -1;
+	}
+}
+
+static int dominant_operator(int p, int q) 
+{
+	assert(p < q);
+	int estack[32];
+	memset(estack, -1, sizeof(estack));
+	int i, etop = -1;
+	for (i = p; i <= q; i++)
+	{
+		if (!is_op(tokens[i].type)) continue;
+		if (etop == -1) estack[++etop] = i;
+		else if (tokens[estack[etop]].type == '(') estack[++etop] = i;
+		else if (tokens[i].type == '(') estack[++etop] = i;
+		else if (tokens[i].type == ')') 
+		{
+			while (etop != -1 && tokens[estack[etop]].type != '(') etop--;
+			if (etop != -1 && tokens[estack[etop]].type == ')') etop--;
+		}
+		else if (judge_prior(tokens[estack[etop]].type, tokens[i].type) < 0)  estack[++etop] = i;
+		else if (judge_prior(tokens[estack[etop]].type, tokens[i].type) > 0) 
+		{
+			while (etop != -1 && judge_prior(tokens[estack[etop]].type, tokens[i].type) > 0)  etop--;
+			estack[++etop] = i;
+		}
+	}
+	if (etop < 0) return -1;
+	return estack[0];
+}
+
+
+
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) 
   {
