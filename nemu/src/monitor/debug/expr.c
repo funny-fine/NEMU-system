@@ -234,9 +234,65 @@ static int dominant_operator(int p, int q)
 	return estack[0];
 }
 
+static uint32_t eval(int p, int q, bool *success) 
+{
+	if (p > q) {*success = false;return -1;}
+	if (p == q) 
+	{
+		uint32_t n = -1;*success = true;
+		if (tokens[p].type == TK_NUMBER) {sscanf(tokens[p].str, "%u", &n);return n;}
+		else if (tokens[p].type == TK_HEX) {sscanf(tokens[p].str, "%x", &n);return n;}
+		else if (tokens[p].type == TK_REG) 
+		{
+			uint32_t i;
+			char *str = tokens[p].str + 1;
+    			for (i = 0; i < 8; i++) 
+			{if (strcmp(reg_name(i, 4), str) == 0) {n = reg_l(i);return n;}
+    			if (strcmp("eip", str) == 0) {n = cpu.eip;return n;}
+    			for (i = 0; i < 8; i++) if (strcmp(reg_name(i, 2), str) == 0) {n = reg_w(i);return n;}
+    			for (i = 0; i < 8; i++) if (strcmp(reg_name(i, 1), str) == 0) {n = reg_b(i);return n;}
+		}
+		*success = false;
+		return n;
+	}
+	else if (check_parentheses(p, q) == 1)  return eval(p + 1, q - 1, success);
+	else 
+	{
+		int op = dominant_operator(p, q);
+		if (op < 0) {*success = false;return -1;}
+		uint32_t val = eval(op + 1, q, success);
+		if (*success == false) 		return -1;
+		switch (tokens[op].type) 
+		{
+		  case TK_NEGATIVE: return -val;
+		  case TK_DEREF: return vaddr_read(val, 4);
+		  case '!': return !val;
+		}
+		uint32_t val1 = eval(p, op - 1, success);
+		if (*success == false) return -1;
+		uint32_t val2 = eval(op + 1, q, success);
+		if (*success == false) return -1;
+		switch (tokens[op].type) 
+		{
+		  case '+': return val1 + val2;
+		  case '-': return val1 - val2;
+		  case '*': return val1 * val2;
+		  case '/': 
+		    if (val2 == 0) {printf("Error: Divide by 0 !\n");*success = false;return -1;}
+		    assert(val2 != 0);
+		    return val1 / val2;
+		  case TK_AND: return val1 && val2;
+		  case TK_OR: return val1 || val2;
+		  case TK_EQ: return val1 == val2;
+		  case TK_NEQ: return val1 != val2;
+		  default: assert(0);
+		}
+	}
+}
+}
 
-
-uint32_t expr(char *e, bool *success) {
+uint32_t expr(char *e, bool *success) 
+{
   if (!make_token(e)) 
   {
     *success = false;
