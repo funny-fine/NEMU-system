@@ -145,11 +145,13 @@ static int check_parentheses(int p, int q)
 }
 
 uint32_t expr(char *e, bool *success) {
-  if (!make_token(e)) {
+  if (!make_token(e)) 
+  {
     *success = false;
     return 0;
   }
-  if (check_parentheses(0, nr_token - 1) == -2) {
+  if (check_parentheses(0, nr_token - 1) == 0) 
+  {
   	*success = false;
   	return 0;
   }
