@@ -155,18 +155,42 @@ static int check_parentheses(int p, int q) {
 		if (tokens[i].type == '(') estack[++etop] = i;
 		if (tokens[i].type == ')') 
 		{
-			if (etop == -1)  return -2; // bad expression, the rightmost ')' is not matched
+			if (etop == -1)  return -2; 
 			lastmatchlp = estack[etop--];
 			lastmatchrp = i;
 		}
 	}
-	if (etop != -1)  return -2; // bad expression, the leftmost '(' is not matched
+	if (etop != -1)  return -2; 
 	if (lastmatchlp != p || lastmatchrp != q) 
 	{
 		if (tokens[p].type == '(' && tokens[q].type == ')')  return -3; 
 		return -1; 
 	}
 	return 1;
+}
+
+static bool is_op(int i) 
+{
+	if (i != TK_NUMBER && i != TK_HEX && i != TK_REG && i != TK_NOTYPE) return true;
+	return false;
+}
+
+static int priority(int token_type) 
+{
+	switch (token_type) {
+	  case TK_OR: return 1;
+	  case TK_AND: return 2;
+	  case TK_EQ:
+	  case TK_NEQ: return 3;
+	  case '+':
+	  case '-': return 4;
+	  case '*':
+	  case '/': return 5;
+	  case TK_NEGATIVE:
+	  case TK_DEREF:
+	  case '!': return 6;
+	  default: return -1;
+	}
 }
 
 uint32_t expr(char *e, bool *success) {
