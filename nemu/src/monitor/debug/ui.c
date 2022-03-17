@@ -115,7 +115,7 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args) 
 {
   char s;
-  if(args==NULL){ printf("args error in cmd_info\n");  return 0;}
+  if(args==NULL){ printf("no args in cmd_info!\n");  return 0;}
 
   int nRet=sscanf(args,"%c",&s);
   if(nRet<=0) {printf("args error in cmd_info\n");  return 0;}
@@ -128,6 +128,9 @@ static int cmd_info(char *args)
      for(i=0;i<8;i++) printf("%s    0x%x\n",regsb[i],reg_b(i));
      return 0;
   }
+  else if(s=='w')
+  {print_wp();return 0;}
+  return 0;
 }
 
 static int cmd_x(char *args) 
