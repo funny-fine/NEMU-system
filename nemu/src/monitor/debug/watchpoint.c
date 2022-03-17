@@ -20,4 +20,18 @@ void init_wp_pool() {
 
 /* TODO: Implement the functionality of watchpoint */
 
+void print_wp()
+{
+  if(head==NULL){printf("no watchpoint now\n");return n;}
+  printf("watchpoint:\n");
+  printf("NO.    EXPR        hitTimes\n");
+  wptemp=head;
+  while(wptemp!=NULL)
+  {
+    printf("%d    %s        %d\n",wptemp->NO,wptemp->e,wptemp->hitNum);
+    wptemp=wptemp->next;
+  }
+}
+
+
 
