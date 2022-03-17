@@ -51,6 +51,34 @@ bool new_wp(char *args)
 	return 1;
 }
 
+bool free_wp(int num) 
+{
+	if (head == NULL) {printf("no wp now!\n");return 0;}
+	WP *find = NULL;
+	if (head->NO == num) 
+	{
+		find = head;
+		head = head->next;
+	}
+	else 
+	{
+		wptemp = head;
+		while (wptemp!=NULL && wptemp->next != NULL) 
+		{
+			if (wptemp->next->NO == num) {
+				find = wptemp->next;
+				wptemp->next = find->next;
+				break;
+			}
+			wptemp = wptemp->next;
+		}
+	}
+	if (find == NULL) return 0;
+	find->next = free_;
+	free_ = find;
+	return true;
+}
+
 void print_wp()
 {
   if(head==NULL){printf("no watchpoint now\n");return;}
