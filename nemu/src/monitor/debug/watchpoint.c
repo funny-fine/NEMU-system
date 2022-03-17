@@ -83,7 +83,8 @@ void print_wp()
 {
   if(head==NULL){printf("no watchpoint now\n");return;}
   printf("watchpoint:\n");
-  printf("%-5d%-15s%d\n\n","NO.","EXPR","hitTimes");
+  printf("%-5s%-20s%-15s%s\n", "Num", "What", "Value", "Hit count");
+  //printf("%-5s%-15s%s\n\n","NO.","EXPR","hitTimes");
   wptemp=head;
   while(wptemp!=NULL)
   {
