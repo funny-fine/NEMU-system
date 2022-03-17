@@ -87,7 +87,7 @@ void print_wp()
   wptemp=head;
   while(wptemp!=NULL)
   {
-    printf("%d    %s        %d\n",wptemp->NO,wptemp->e,wptemp->hitNum);
+    printf("%-5d%-15s%d\n\n",wptemp->NO,wptemp->e,wptemp->hitNum);
     wptemp=wptemp->next;
   }
 }
