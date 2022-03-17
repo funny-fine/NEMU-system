@@ -58,7 +58,9 @@ static struct {
   { "si", "Step [N] instructions exactly (1 step if no args given), usage: si [N]", cmd_si },
   { "info", "Display informations about registers and watchpoints in the program being debugged, usage: info r / info w", cmd_info },
   { "x", "Examine memory, usage: x [N] [EXPR]", cmd_x },
-  { "p", "Print value of expression, usage: p [EXPR]", cmd_p }
+  { "p", "Print value of expression, usage: p [EXPR]", cmd_p },
+  { "w", "Set a watchpoint for an expression, usage: w [EXPR]", cmd_w },
+  { "d", "Delete watchpoint number [N] (delete all if no args given), usage: d [N]", cmd_d }
 
 };
 
@@ -161,6 +163,29 @@ static int cmd_p(char *args)
 	printf("expr_value = %d\n", result);
   }
   else printf("Illegal expression.\n");
+  return 0;
+}
+
+static int cmd_w(char *args) 
+{
+  if (args == NULL) 
+  {
+    printf("Argument required (expression to compute).\n");
+    return 0;
+  }
+  new_wp(args);
+  return 0;
+}
+
+static int cmd_d(char *args) {
+  int num=0;
+  int nRet=sscanf(args,"%d",&num);
+  if(nRet<=0){printf("args err in cmd_si\n");return 0;}
+  int r=free_wp(num);
+
+  if(r==0) printf("err: no wp %d\n",num);
+  else  printf("success delete wp %d\n",num);
+
   return 0;
 }
 
