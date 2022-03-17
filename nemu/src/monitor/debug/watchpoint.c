@@ -92,5 +92,28 @@ void print_wp()
   }
 }
 
+bool watch_wp() 
+{
+	int val;
+	bool success = 0;
+	if(head==NULL) return 1;
+	wptemp = head;
+	while (wptemp != NULL) 
+	{
+		val = expr(wptemp->e, &success);
+		if (val!=wptemp->oldValue) 
+		{
+			wptemp->hitNum++;
+			printf("Watchpoint %d: %s\n\n", wptemp->NO, wptemp->e);
+			printf("Old value = %d\n", wptemp->oldValue);
+			printf("New value = %d\n", val);
+			wptemp->oldValue=val;
+			return 0;
+		}
+		wptemp = wptemp->next;
+	}
+	return 1;
+}
+
 
 
