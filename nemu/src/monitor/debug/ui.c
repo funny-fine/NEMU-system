@@ -133,6 +133,7 @@ static int cmd_info(char *args)
   return 0;
 }
 
+/*
 static int cmd_x(char *args) 
 {
   char *len=strtok(args," ");
@@ -147,7 +148,7 @@ static int cmd_x(char *args)
     /*char copy_addr[20];
     memset(&copy_arrd,0,20);
     sprintf(copy_addr,"%x",address);
-    printf("*/
+    printf("
     if(i%4==0)
       printf("\n0x%x:    0x%02x",address+i,vaddr_read(address+i,4));
     else
@@ -156,6 +157,47 @@ static int cmd_x(char *args)
   printf("\n");
   return 0;
   
+}
+*/
+
+static int cmd_x(char *args) {
+  /* extract the first argument */
+  char *arg = strtok(NULL, " ");
+  uint32_t n = 0;
+
+  if (arg == NULL) {
+    /* no argument given */
+    printf("Argument required (starting display address).\n");
+  }
+  else {
+    char *temp1 = strtok(NULL, " ");
+    char *temp2 = strtok(NULL, " ");
+    uint32_t start_addr = 0;
+    uint32_t mem_data = 0;
+    bool success = false;
+    if (temp2 == NULL) {
+      sscanf(arg, "%u", &n);
+      start_addr = expr(temp1, &success);
+      if (!success) {
+      	printf("Illegal expression.\n");
+      	return 0;
+      }
+      uint32_t i, j;
+      for (i = 0; i < n ; i++) {
+      	printf("0x%x:    ", start_addr);
+      	for (j = 0; j < 4; j++) {
+      		mem_data = vaddr_read(start_addr, 1);
+      		printf("0x%02x    ", mem_data);
+      		start_addr++;
+      	}
+      	printf("\n");
+      }
+    }
+    else {
+      printf("Syntax error: Too much arguments.\n");
+    }
+  }
+  return 0;
 }
 
 static int cmd_p(char *args) 
