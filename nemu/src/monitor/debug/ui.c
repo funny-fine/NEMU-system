@@ -135,17 +135,23 @@ static int cmd_info(char *args)
 
 static int cmd_x(char *args) 
 {
-  int nLen=0;
-  vaddr_t addr;
-  int nRet=sscanf(args,"%d 0x%x",&nLen,&addr);
-  if(nRet<=0) {printf("args error in cmd_x\n");  return 0;}
+  char *len=strtok(args," ");
+  char *addr=strtok(NULL," ");
+
+  uint32_t length=0;sscanf(len,"%u",&length);
+  bool success; uint32_t address=expr(addr,&success);
+
   printf("Memory:");
-  for(int i=0;i<nLen;i++) 
+  for(int i=0;i<length;i++) 
   {
+    /*char copy_addr[20];
+    memset(&copy_arrd,0,20);
+    sprintf(copy_addr,"%x",address);
+    printf("*/
     if(i%4==0)
-      printf("\n0x%x:    0x%02x",addr+i,vaddr_read(addr+i,1));
+      printf("\n0x%x:    0x%02x",address+i,vaddr_read(address+i,4));
     else
-      printf("    0x%02x",vaddr_read(addr+i,1));
+      printf("    0x%02x",vaddr_read(address+i,1));
   }
   printf("\n");
   return 0;
