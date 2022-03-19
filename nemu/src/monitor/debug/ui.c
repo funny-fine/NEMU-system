@@ -134,24 +134,44 @@ static int cmd_info(char *args)
 }
 
 
-static int cmd_x(char *args) 
-{
-    int nLen=0;
-    vaddr_t addr;
-    int nRet=sscanf(args,"%d 0x%x",&nLen,&addr);
-    if(nRet<=0) 
-    {printf("args error in cmd_x\n");  return 0;}
-    printf("Memory:");
+static int cmd_x(char *args) {
+  /* extract the first argument */
+  char *arg = strtok(NULL, " ");
+  uint32_t n = 0;
 
-    for(int i=0;i<nLen;i++) 
-    {
-        if(i%4==0)
-            printf("\n0x%x:    0x%02x",addr+i,vaddr_read(addr+i,1));
-        else
-            printf("    0x%02x",vaddr_read(addr+i,1));
+  if (arg == NULL) {
+    /* no argument given */
+    printf("Argument required (starting display address).\n");
+  }
+  else {
+    char *temp1 = strtok(NULL, " ");
+    char *temp2 = strtok(NULL, " ");
+    uint32_t start_addr = 0;
+    uint32_t mem_data = 0;
+    bool success = false;
+    if (temp2 == NULL) {
+      sscanf(arg, "%u", &n);
+      start_addr = expr(temp1, &success);
+      if (!success) {
+      	printf("Illegal expression.\n");
+      	return 0;
+      }
+      uint32_t i, j;
+      for (i = 0; i < n ; i++) {
+      	printf("0x%x:    ", start_addr);
+      	for (j = 0; j < 4; j++) {
+      		mem_data = vaddr_read(start_addr, 1);
+      		printf("0x%02x    ", mem_data);
+      		start_addr++;
+      	}
+      	printf("\n");
+      }
     }
-    printf("\n");
-    return 0; 
+    else {
+      printf("Syntax error: Too much arguments.\n");
+    }
+  }
+  return 0;
 }
 
 static int cmd_p(char *args) 
