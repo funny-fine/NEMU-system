@@ -133,32 +133,6 @@ static int cmd_info(char *args)
   return 0;
 }
 
-/*
-static int cmd_x(char *args) 
-{
-  char *len=strtok(args," ");
-  char *addr=strtok(NULL," ");
-
-  uint32_t length=0;sscanf(len,"%u",&length);
-  bool success; uint32_t address=expr(addr,&success);
-
-  printf("Memory:");
-  for(int i=0;i<length;i++) 
-  {
-    /*char copy_addr[20];
-    memset(&copy_arrd,0,20);
-    sprintf(copy_addr,"%x",address);
-    printf("
-    if(i%4==0)
-      printf("\n0x%x:    0x%02x",address+i,vaddr_read(address+i,4));
-    else
-      printf("    0x%02x",vaddr_read(address+i,1));
-  }
-  printf("\n");
-  return 0;
-  
-}
-*/
 
 static int cmd_x(char *args) {
   /* extract the first argument */
