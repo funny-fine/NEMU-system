@@ -144,7 +144,7 @@ static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width) {
   if(width==4) rtl_mv(dest,src1);
   else
   {
-    assert(width==1||width==2);
+    //assert(width==1||width==2);
     rtl_shli(dest,src1,(4-width)*8);
     rtl_sari(dest,dest,(4-width)*8);
   }
