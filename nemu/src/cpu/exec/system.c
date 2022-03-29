@@ -47,7 +47,7 @@ void pio_write(ioaddr_t, int, uint32_t);
 make_EHelper(in) {
   //TODO();
   rtl_li(&t0,pio_read(id_src->val,id_dest->width));
-  operand_wirte(id_dest,&t0);
+  operand_write(id_dest,&t0);
 
   print_asm_template2(in);
 
