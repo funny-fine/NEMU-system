@@ -23,7 +23,7 @@ operand_write(id_dest,&t2);
 make_EHelper(pusha) {
   //TODO();
 
-  rtl_li(&t0, cpu.esp); // save esp
+  t0=cpu.esp; // save esp
   rtl_push(&cpu.eax);
   rtl_push(&cpu.ecx);
   rtl_push(&cpu.edx);
