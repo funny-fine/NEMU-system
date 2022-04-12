@@ -86,6 +86,8 @@ static inline void restart() {
 //TODO
   unsigned int origin=2;
   memcpy(&cpu.eflags,&origin,sizeof(cpu.eflags));
+  
+  cpu.cs=8;
 
 #ifdef DIFF_TEST
   init_qemu_reg();
