@@ -21,13 +21,31 @@ operand_write(id_dest,&t2);
 }
 
 make_EHelper(pusha) {
-  TODO();
+  //TODO();
+
+  rtl_li(&t0, cpu.esp); // save esp
+  rtl_push(&cpu.eax);
+  rtl_push(&cpu.ecx);
+  rtl_push(&cpu.edx);
+  rtl_push(&cpu.ebx);
+  rtl_push(&t0); // push esp
+  rtl_push(&cpu.ebp);
+  rtl_push(&cpu.esi);
+  rtl_push(&cpu.edi);
 
   print_asm("pusha");
 }
 
 make_EHelper(popa) {
-  TODO();
+  //TODO();
+  rtl_pop(&cpu.edi);
+  rtl_pop(&cpu.esi);
+  rtl_pop(&cpu.ebp);
+  rtl_pop(&t0); // skip esp
+  rtl_pop(&cpu.ebx);
+  rtl_pop(&cpu.edx);
+  rtl_pop(&cpu.ecx);
+  rtl_pop(&cpu.eax);
 
   print_asm("popa");
 }
