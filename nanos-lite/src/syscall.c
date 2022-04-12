@@ -4,10 +4,9 @@
 int sys_none()
 {return 1;}
 
-static uintptr_t sys_exit(int status)
+void sys_exit(int status)
 {
   _halt(status);
-  return status;
 }
 
 
