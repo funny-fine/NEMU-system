@@ -108,6 +108,9 @@ static inline make_DopHelper(O) {
 #endif
 }
 
+make_DHelper(lidt_a)
+{decode_op_a(eip, id_dest, true);}
+
 /* Eb <- Gb
  * Ev <- Gv
  */
