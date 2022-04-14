@@ -79,7 +79,7 @@ ssize_t fs_write(int fd, void *buf, size_t len)
   assert(fd >=0 && fd < NR_FILES);
   if(fd<3)
   {
-    Log("arg err: fd>3!");
+    Log("arg err: fd<3!");
     return 0;
   }
   int n=fs_filesz(fd)-get_open_offset(fd);
@@ -94,7 +94,7 @@ ssize_t fs_read(int fd, void *buf, size_t len)
   assert(fd >=0 && fd < NR_FILES);
   if(fd<3)
   {
-    Log("arg err: fd>3!");
+    Log("arg err: fd<3!");
     return 0;
   }
   int n=fs_filesz(fd)-get_open_offset(fd);
