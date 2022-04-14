@@ -14,7 +14,7 @@ int sys_write(int fd,void* buf,size_t len)
   if(fd==1||fd==2)
   {
     char c;
-    Log("in_out%s",(char*)buf);
+    Log("in_out:  %s",(char*)buf);
     for(int i=0;i<len;i++)
     {
       memcpy(&c,buf+i,1);
