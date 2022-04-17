@@ -4,6 +4,12 @@
 #define RTC_PORT 0x48   // Note that this is not standard
 static unsigned long boot_time;
 
+void getScreen(int* width, int*height)
+{
+  *width=_screen.width;
+  *height=_screen.height;
+}
+
 void _ioe_init() {
   boot_time = inl(RTC_PORT);
 }

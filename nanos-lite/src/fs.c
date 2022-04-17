@@ -14,6 +14,8 @@ enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB, FD_EVENTS, FD_DISPINFO, FD_NORMAL};
 extern void ramdisk_read(void* buf, off_t offset, size_t len);
 extern void ramdisk_write(void* buf, off_t offset, size_t len);
 
+void dispinfo_read(void *buf,off_t offset,size_t len);
+
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
   {"stdin (note that this is not the actual stdin)", 0, 0},
@@ -29,6 +31,11 @@ static Finfo file_table[] __attribute__((used)) = {
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+  extern void getScreen(int* p_width, int* p_height);
+  int width=0,height=0;
+  getScreen(&width, &height);
+  file_table[FD_FB].size=width*height*sizeof(uint32_t);
+  Log("set FD_FB size=%d",file_table[FD_FB].size);
 }
 
 size_t fs_filesz(int fd)
@@ -99,7 +106,10 @@ ssize_t fs_read(int fd, void *buf, size_t len)
   }
   int n=fs_filesz(fd)-get_open_offset(fd);
   if(n>len)  n=len;
-  ramdisk_read(buf, get_open_offset(fd)+disk_offset(fd), n);
+  if(fd==FD_DISPINFO)
+    dispinfo_read(buf,get_open_offset(fd),n);
+  else
+    ramdisk_read(buf, get_open_offset(fd)+disk_offset(fd), n);
   set_open_offset(fd,get_open_offset(fd)+n);
   return n;
 }
