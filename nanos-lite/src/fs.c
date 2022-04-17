@@ -91,7 +91,7 @@ ssize_t fs_write(int fd, void *buf, size_t len)
   }
   int n=fs_filesz(fd)-get_open_offset(fd);
   if(n>len)  n=len;
-  if(fd==FD_DISPINFO)
+  if(fd==FD_FB)
     fb_write(buf,get_open_offset(fd),n);
   else
     ramdisk_write(buf, get_open_offset(fd)+disk_offset(fd), n);
